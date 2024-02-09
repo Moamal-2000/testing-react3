@@ -1,12 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const User = ({ userData }) => {
   const navigateTo = useNavigate();
+  const [params, setParams] = useSearchParams();
 
   return (
     <div>
       <p>User: {userData.name}</p>
-      <button onClick={() => navigateTo(`/users/${userData.id}`)}>
+      <button
+        onClick={() => {
+          setParams({ user: userData.id });
+          navigateTo(`/users/user/?user=${userData.id}`);
+        }}
+      >
         Details
       </button>
     </div>

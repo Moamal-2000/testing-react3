@@ -1,15 +1,32 @@
 import axios from "axios";
-import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const UserDeatils = () => {
-  const userData = useLoaderData();
-  const { name, id } = userData;
+  const [params, setParams] = useSearchParams();
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    const userLoader = async () => {
+      const userId = params.get("user");
+
+      try {
+        const res = await axios(
+          `https://jsonplaceholder.typicode.com/users/${userId}`
+        );
+        setUserData(res.data);
+      } catch (err) {
+        throw { message: err.message };
+      }
+    };
+    userLoader();
+  }, []);
 
   return (
     <div>
       <h2>User details</h2>
-      <p>User id: {id}</p>
-      <p>Username: {name}</p>
+      <p>User id: {userData?.id}</p>
+      <p>Username: {userData?.name}</p>
     </div>
   );
 };
